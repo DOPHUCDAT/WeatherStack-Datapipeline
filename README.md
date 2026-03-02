@@ -1,163 +1,132 @@
-🌦 WeatherStack Data Pipeline
+# 🌦 WeatherStack Data Pipeline
 
-End-to-end Data Engineering pipeline sử dụng PostgreSQL, Airflow, dbt và Superset để thu thập, xử lý và trực quan hóa dữ liệu thời tiết từ OpenWeather API.
+An end-to-end Data Engineering pipeline using PostgreSQL, Airflow, dbt, and Superset to ingest, transform, and visualize weather data from the OpenWeather API.
 
-🚀 Project Overview
+## 🚀 Project Overview
 
-Pipeline này thực hiện:
+This pipeline performs the following steps:
 
-📡 Gọi dữ liệu từ OpenWeather API
+- 📡 Fetches weather data from the OpenWeather API
+- 💾 Stores raw data in PostgreSQL
+- 🔄 Transforms data with dbt
+- 📊 Visualizes analytics in Superset
+- ⚙️ Automates the full workflow with Airflow
 
-💾 Lưu raw data vào PostgreSQL
+## 🧰 Tech Stack
 
-🔄 Transform dữ liệu bằng dbt
+| Tool | Purpose |
+|---|---|
+| PostgreSQL | Data storage |
+| Airflow | Orchestration |
+| dbt | Data transformation |
+| Superset | Data visualization |
+| Docker | Containerization |
 
-📊 Trực quan hóa dữ liệu bằng Superset
+## ⚙️ How It Works
 
-⚙️ Tự động hóa toàn bộ bằng Airflow
+### 1) Extract
 
-🧰 Tech Stack
-Tool	Purpose
-PostgreSQL	Data storage
-Airflow	Orchestration
-dbt	Data transformation
-Superset	Data visualization
-Docker	Containerization
-📂 Project Structure
-WeatherStack-Datapipeline/
-│
-├── airflow/
-│   └── dags/
-│
-├── dbt/
-│   ├── models/
-│   └── dbt_project.yml
-│
-├── postgres/
-│
-├── superset/
-│
-├── docker-compose.yml
-└── README.md
-⚙️ How It Works
-1️⃣ Extract
+Airflow DAG tasks:
 
-Airflow DAG:
+- Call the OpenWeather API
+- Fetch weather fields (temperature, humidity, wind speed, etc.)
+- Insert raw data into PostgreSQL
 
-Calls OpenWeather API
-
-Fetches weather data (temperature, humidity, wind speed, etc.)
-
-Inserts raw data into PostgreSQL
-
-2️⃣ Transform
+### 2) Transform
 
 dbt models:
 
-Clean raw data
+- Clean raw data
+- Handle null values
+- Aggregate metrics (average temperature, daily summaries, etc.)
+- Build analytics-ready tables
 
-Handle null values
+### 3) Load & Visualize
 
-Aggregate metrics (avg temperature, daily summary, etc.)
+Superset connects to the PostgreSQL analytics schema to create dashboards such as:
 
-Create analytical tables
+- Daily temperature trends
+- Humidity comparison
+- Wind speed analysis
+- Weather condition distribution
 
-3️⃣ Load & Visualize
+## 🐳 Running the Project (Docker)
 
-Superset connects to PostgreSQL analytics schema:
+### 1) Clone the repository
 
-Daily temperature trends
-
-Humidity comparison
-
-Wind speed analysis
-
-Weather condition distribution
-
-🐳 Running the Project (Docker)
-1️⃣ Clone repository
+```bash
 git clone https://github.com/DOPHUCDAT/WeatherStack-Datapipeline.git
 cd WeatherStack-Datapipeline
-2️⃣ Add Environment Variables
+```
 
-Create .env file:
+### 2) Add environment variables
 
+Create a `.env` file:
+
+```env
 OPENWEATHER_API_KEY=your_api_key
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=weather_db
-3️⃣ Start services
+```
+
+### 3) Start services
+
+```bash
 docker-compose up -d
+```
 
-Services available:
+Services:
 
-Airflow: http://localhost:8080
+- Airflow: http://localhost:8080
+- Superset: http://localhost:8088
+- PostgreSQL: localhost:5432
 
-Superset: http://localhost:8088
-
-PostgreSQL: localhost:5432
-
-📊 Example Dashboards
+## 📊 Example Dashboards
 
 Superset dashboards may include:
 
-🌡 Average temperature by city
+- 🌡 Average temperature by city
+- 📅 Daily weather trend
+- 💧 Humidity distribution
+- 🌬 Wind speed analysis
 
-📅 Daily weather trend
+## 🔄 Airflow Automation
 
-💧 Humidity distribution
+The Airflow DAG automates:
 
-🌬 Wind speed analysis
+- API extraction
+- Data loading into PostgreSQL
+- `dbt run`
+- `dbt test`
 
-🔄 Airflow Automation
 
-Airflow DAG automates:
+## 🧪 dbt Models
 
-API extraction
+Typical transformation layers:
 
-Data loading into Postgres
-
-dbt run
-
-dbt test
-
-Scheduling example:
-
-@daily
-🧪 dbt Models
-
-Typical transformations:
-
-Staging layer (stg_weather)
-
-Intermediate layer
-
-Mart layer (fact_weather_daily)
+- Staging layer (`stg_weather`)
+- Intermediate layer
+- Mart layer (`fact_weather_daily`)
 
 Run dbt manually:
 
+```bash
 docker exec -it dbt_container dbt run
-📈 Data Flow Layers
-Layer	Description
-Raw	Direct API ingestion
-Staging	Cleaned structured tables
-Mart	Aggregated analytical tables
-🎯 Key Learning Outcomes
+```
 
-Building production-style ELT pipeline
+## 📈 Data Flow Layers
 
-Data modeling with dbt
+| Layer | Description |
+|---|---|
+| Raw | Direct API ingestion |
+| Staging | Cleaned and structured tables |
+| Mart | Aggregated analytical tables |
 
-Workflow orchestration with Airflow
+## 🎯 Key Learning Outcomes
 
-BI visualization with Superset
-
-Containerized data stack using Docker
-
-🔐 Security Notes
-
-API keys stored in .env
-
-.env excluded via .gitignore
-
-No credentials committed to repo
+- Building a production-style ELT pipeline
+- Data modeling with dbt
+- Workflow orchestration with Airflow
+- BI visualization with Superset
+- Containerized data stack using Docker
